@@ -6,3 +6,85 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+.answer{
+    height: 50px;
+    border: 3px solid black;
+    margin-top: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    align-items: center;
+}
+.answer p{
+display: inline-block;
+}
+.answer div{
+    display: inline-block;
+}
+.selected{
+    border: 3px solid green;
+    background-color: lightgreen;
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button{
+    width: 20%;
+}
+
+.incorrect{
+    border: 3px solid red;
+}
+.incorrect svg{
+    stroke: red;
+    display: inline-block;
+}
+.correct{
+    border: 3px solid green;
+}
+.correct svg{
+    stroke: green;
+    display: inline-block;
+}
+.dot{
+    display: inline-block;
+    height: 26px;
+    width: 26px;
+    /* background-color: ; */
+    border-radius: 50%;
+    border: 3px solid black;
+    display: inline-block;
+    padding: 3px 3px;
+  }
+
+  .square{
+    display: inline-block;
+    height: 26px;
+    width: 26px;
+    padding: 3px 3px;
+    border: 3px solid black;
+  }
+
+  .selected-dot{
+    height: 15px;
+    width: 15px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+}
+.selected-square{
+    height: 15px;
+    width: 15px;
+    background-color: green;
+    display: inline-block;
+}
+.large .modal{
+    width: 100%;
+}
