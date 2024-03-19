@@ -1,5 +1,5 @@
-import { App, ColorComponent, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, Workspace,setIcon } from 'obsidian';
-
+import { App, ColorComponent, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, Workspace,setIcon } from 'obsidian';
+import quizPlugin from '../main'
 
 type Question = {
   text: string;
@@ -13,17 +13,23 @@ var currQuestion = 0;
 export default class QuestionsModal extends Modal {
   contentEl: HTMLElement;
   currQuestion: Question;
+  pluginn: quizPlugin;
   
-	constructor(app: App) {
+	constructor(app: App,pluginn: quizPlugin) {
 		super(app);
-    
+    this.pluginn = pluginn;
 	}
 
 	onOpen() {
-
     const activeEditor = this.app.workspace.getActiveViewOfType(MarkdownView);
-    const content = activeEditor?.editor.getValue();   
-    extractQuestion(content?.toString() ?? "");
+    const content = activeEditor?.editor.getValue();
+    
+    if(this.pluginn.settings.format1){
+      extractQuestion(content?.toString() ?? "");
+    }
+    if(this.pluginn.settings.format2){
+      extractQuestion2(content?.toString() ?? "");
+    }
     this.currQuestion = questionArr[0];
     this.makeQuestion(this.currQuestion);
     this.containerEl.classList.add("large");
@@ -53,7 +59,6 @@ export default class QuestionsModal extends Modal {
       answerElem.createEl("p",{text:ans});
       if(question.selected.contains(ans)){
         answerElem.classList.add("selected");
-        console.log(circleFlag);
         if(circleFlag){
           answerElem.firstElementChild?.firstElementChild?.classList.add("selected-dot");
         }else{
@@ -174,9 +179,29 @@ function extractQuestion(text: string){
   for(let Qs of matchQs){
     const regex = />> - (.+)/g;
     const match = Qs.match(regex);
-    console.log(Qs);
-    console.log(match);
     const regex2 = /[^>]> - (.+)/g;
+    const match2 = Qs.match(regex2)
+    const regex3 = /(?:\[!question\])-? (.+)\?/g;
+    const match3 = Qs.match(regex3)
+
+    if (match) {
+    const answer: string[] = match ?? [""];
+    const answer2: string[] = match2 ?? [""];
+    const answer3: string[] = match3 ?? [""];
+    questionArr.push({text: answer3[0].replace("[!question]","").replace("-",""),answers: answer2.map(item => item.split(" - ")[1]),correct: answer.map(item => item.split(" - ")[1]),selected: []});
+
+    }
+  }
+}
+
+function extractQuestion2(text: string){
+  const regexForQs = />\[!question]-? (.+?)\n(?:> - .+\n)+/g
+  const matchQs: string[] = text.match(regexForQs) ?? [];
+
+  for(let Qs of matchQs){
+    const regex = /> - \[(x)](.+?)\n/g;
+    const match = Qs.match(regex);
+    const regex2 = /> - \[(x| )](.+?)\n/g;
     const match2 = Qs.match(regex2)
     const regex3 = /(?:\[!question\])-? (.+)\?/g;
     const match3 = Qs.match(regex3)
